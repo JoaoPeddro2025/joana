@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Ensure ComfyUI is importable as 'comfy' (ComfyUI submodule)
-export PYTHONPATH="${ROOT_DIR}/external/diffusion-pipe/submodules/ComfyUI:${ROOT_DIR}/external/diffusion-pipe:${PYTHONPATH:-}"
+export PYTHONPATH="${ROOT_DIR}/external/diffusion-pipe:${ROOT_DIR}/external/diffusion-pipe/submodules/ComfyUI:${PYTHONPATH:-}"
 
 
 CFG="${1:-${ROOT_DIR}/configs/joana_flux/train_smoke.toml}"
