@@ -3,6 +3,9 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# Fix 'utils' import clash: make diffusion-pipe/utils a real package
+touch "${ROOT_DIR}/external/diffusion-pipe/utils/__init__.py"
+
 # Ensure ComfyUI is importable as 'comfy' (ComfyUI submodule)
 export PYTHONPATH="${ROOT_DIR}/external/diffusion-pipe:${ROOT_DIR}/external/diffusion-pipe/submodules/ComfyUI:${PYTHONPATH:-}"
 
