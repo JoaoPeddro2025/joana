@@ -1,0 +1,29 @@
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flux_lora_jupyter
+    ports:
+      - "8888:8888"
+    shm_size: "16gb"
+    env_file:
+      - .env
+    environment:
+      - HF_HOME=/workspace/models/hf_cache
+      - TRANSFORMERS_CACHE=/workspace/models/hf_cache
+      - HF_HUB_ENABLE_HF_TRANSFER=1
+      - PYTHONUNBUFFERED=1
+      - WANDB_MODE=offline
+    volumes:
+      - ./:/workspace/repo
+      - ${HOST_MODELS_DIR}:/workspace/models
+      - ${HOST_DATASETS_DIR}:/workspace/datasets
+      - ${HOST_OUTPUTS_DIR}:/workspace/outputs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

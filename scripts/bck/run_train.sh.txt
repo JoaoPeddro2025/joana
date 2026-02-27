@@ -1,0 +1,23 @@
+cat > /workspace/repo/scripts/run_train.sh <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+
+CFG="${1:-/workspace/repo/configs/joana_flux/train_smoke.toml}"
+
+# Porta fixa + fallback aleatório se já estiver ocupada
+PORT="${MASTER_PORT:-31337}"
+ADDR="${MASTER_ADDR:-127.0.0.1}"
+
+cd /workspace/repo/external/diffusion-pipe
+
+echo "[INFO] MASTER_ADDR=$ADDR MASTER_PORT=$PORT"
+echo "[INFO] Config: $CFG"
+
+export MASTER_ADDR="$ADDR"
+export MASTER_PORT="$PORT"
+
+# Deepspeed respeita --master_port (não confie só em env)
+deepspeed --num_gpus=1 --master_port "$PORT" train.py --config "$CFG"
+SH
+
+chmod +x /workspace/repo/scripts/run_train.sh

@@ -1,0 +1,19 @@
+cat > /workspace/repo/scripts/run_smoke_all.sh <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "=== (1/4) check_env ==="
+bash /workspace/repo/scripts/check_env.sh || true
+
+echo "=== (2/4) setup diffusion-pipe deps ==="
+bash /workspace/repo/scripts/setup_diffusion_pipe.sh
+
+echo "=== (3/4) download FLUX (se necessário) ==="
+bash /workspace/repo/scripts/download_flux1_dev || true
+
+echo "=== (4/4) make smoke dataset + train ==="
+bash /workspace/repo/scripts/make_smoke_dataset.sh
+bash /workspace/repo/scripts/run_train.sh /workspace/repo/configs/joana_flux/train_smoke.toml
+SH
+
+chmod +x /workspace/repo/scripts/run_smoke_all.sh

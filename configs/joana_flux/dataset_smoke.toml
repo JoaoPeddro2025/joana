@@ -1,0 +1,5 @@
+resolutions = [[384, 384]]
+
+directory = [
+  { path = "/workspace/datasets/joana_smoke2/images", caption_extension = ".txt" }
+]
