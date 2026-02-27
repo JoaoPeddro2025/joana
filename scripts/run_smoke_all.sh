@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /workspace/repo
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+cd ${ROOT_DIR}
 
 echo "=== (1/5) check_env ==="
 bash scripts/check_env.sh
@@ -16,6 +18,6 @@ echo "=== (4/5) make smoke dataset ==="
 bash scripts/make_smoke_dataset.sh
 
 echo "=== (5/5) train smoke ==="
-bash scripts/run_train.sh /workspace/repo/configs/joana_flux/train_smoke.toml
+bash scripts/run_train.sh ${ROOT_DIR}/configs/joana_flux/train_smoke.toml
 
 echo "[OK] Fim do smoke run."

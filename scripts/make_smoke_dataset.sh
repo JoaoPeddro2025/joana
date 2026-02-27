@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 SRC="${1:-/workspace/datasets/joana/images}"
 DST="/workspace/datasets/joana_smoke2/images"
 N="${N_SMOKE:-2}"
@@ -25,7 +27,7 @@ ls "$SRC" | grep -E '\.(jpg|jpeg|png|webp)$' | head -"$N" | while read -r f; do
   fi
 done
 
-cat > /workspace/repo/configs/joana_flux/dataset_smoke.toml <<TOML
+cat > ${ROOT_DIR}/configs/joana_flux/dataset_smoke.toml <<TOML
 resolutions = [[${RES}, ${RES}]]
 
 directory = [

@@ -2,7 +2,7 @@ epochs = 1
 
 # ===== MAIN CONFIG =====
 
-dataset = "/workspace/repo/configs/joana_flux/dataset_smoke.toml"
+dataset = "configs/joana_flux/dataset_smoke.toml"
 output_dir = "/workspace/outputs/joana_flux"
 
 logging_steps = 1

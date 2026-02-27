@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CFG="${1:-/workspace/repo/configs/joana_flux/train_smoke.toml}"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+CFG="${1:-${ROOT_DIR}/configs/joana_flux/train_smoke.toml}"
 ADDR="${MASTER_ADDR:-127.0.0.1}"
 BASE_PORT="${MASTER_PORT:-31337}"
 
@@ -42,7 +44,7 @@ PY
 
 PORT="$(choose_port)"
 
-cd /workspace/repo/external/diffusion-pipe
+cd ${ROOT_DIR}/external/diffusion-pipe
 
 echo "[INFO] MASTER_ADDR=$ADDR"
 echo "[INFO] MASTER_PORT=$PORT"
