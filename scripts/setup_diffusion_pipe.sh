@@ -22,21 +22,27 @@ else
 fi
 
 echo "
+
 # ---- Patch sqlite autocommit arg (py3.11 compatibility) ----
-python3.11 - <<'PY2'
+DP_DIR="${ROOT_DIR}/external/diffusion-pipe"
+CACHE_PY="${DP_DIR}/utils/cache.py"
+if python3.11 - <<'PY2'
 import sys
-from pathlib import Path
-major, minor = sys.version_info[:2]
-if (major, minor) <= (3, 11):
-    p = Path("${DP_DIR}/utils/cache.py")
-    if p.exists():
-        s = p.read_text()
-        if "autocommit=False" in s:
-            p.write_text(s.replace("sqlite3.connect(self.metadata_db, autocommit=False)", "sqlite3.connect(self.metadata_db)"))
-            print("[PATCH] Removed sqlite autocommit kwarg for py<=3.11:", p)
-        else:
-            print("[PATCH] sqlite autocommit not present:", p)
+print(int(sys.version_info[:2] <= (3,11)))
 PY2
+then
+  # python command always exits 0; we check output:
+  ver=$(python3.11 - <<'PY3'
+import sys
+print(int(sys.version_info[:2] <= (3,11)))
+PY3
+)
+  if [ "$ver" = "1" ] && [ -f "$CACHE_PY" ]; then
+    # remove autocommit kwarg if present
+    grep -q "autocommit=False" "$CACHE_PY" && sed -i 's/sqlite3.connect(self.metadata_db, autocommit=False)/sqlite3.connect(self.metadata_db)/g' "$CACHE_PY" && \
+      echo "[PATCH] Removed sqlite autocommit kwarg for py<=3.11: $CACHE_PY" || true
+  fi
+fi
 # -----------------------------------------------------------
 
 == Verifying torch trio =="
